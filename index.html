@@ -34,22 +34,35 @@
   <header>
     
   
-    <h1 class="title"><a href="/2013/02/18/hello/">Hello</a></h1>
+    <h1 class="title"><a href="/2013/02/18/use-bower-with-heroku/">Use bower with heroku</a></h1>
   
 
-    <time datetime="2013-02-18T14:05:34.000Z">
+    <time datetime="2013-02-18T14:33:26.000Z">
   <span class="day">18</span><span class="month">Feb</span>
 </time>
   </header>
   <div class="entry-content">
     
       <p>Hello!</p>
+<p><a href="http://twitter.github.com/bower/">Bower</a> is pretty awsome! <a href="http://www.heroku.com/">Heroku</a> too!</p>
+<p>Use them together!</p>
+<p>Without creating your own Heroku <a href="https://devcenter.heroku.com/articles/buildpacks">buildpack</a>, you can achieve that quite easily.</p>
+<p>Just add a dependency to Bower in your <code>package.json</code> and then rely on the <code>npm scripts</code> to execute a <code>postinstall</code> command (<a href="https://npmjs.org/doc/scripts.html">https://npmjs.org/doc/scripts.html</a>).</p>
+<p>So you&#39;ll end up with somthing like this in your <code>package.json</code>:</p>
+<pre><code><div class="line"><span class="string">"dependencies"</span>: {</div><div class="line">    <span class="string">"bower"</span>: <span class="string">"0.6.x"</span></div><div class="line">},</div><div class="line"><span class="string">"scripts"</span>: {</div><div class="line">    <span class="string">"postinstall"</span>: <span class="string">"./node_modules/bower/bin/bower install"</span></div><div class="line">}</div></code></pre>
+
+<p>And that&#39;s it! Heroku will run a <code>npm install</code> that will execute the <code>bower install</code>.</p>
+<p><em>Pros:</em> one command to rule them all</p>
+<p><em>Cons:</em> you unnecessarily embed bower as a dependency</p>
 
     
     
     <footer class="meta">
       
       
+  <div class="tags">
+<a href="/tags/js/">js</a><a href="/tags/node/">node</a><a href="/tags/bower/">bower</a></div>
+
       
     </footer>
     
@@ -79,6 +92,18 @@
   <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 
+
+<script type="text/javascript">
+var disqus_shortname = 'xseignard';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 
