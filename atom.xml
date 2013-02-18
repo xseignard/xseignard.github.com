@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[/dev/xavier]]></title>
+  <subtitle><![CDATA[show me some code]]></subtitle>
+  <link href="http://xseignard.github.com/atom.xml" rel="self"/>
+  <link href="http://xseignard.github.com"/>
+  <updated>2013-02-18T16:32:23.578Z</updated>
+  <id>http://xseignard.github.com/</id>
+  <author>
+    <name><![CDATA[xavier]]></name>
+    <email><![CDATA[xavier.seignard@gmail.com]]></email>
+  </author>
+  <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[Use bower with heroku]]></title>
+    <link href="http://xseignard.github.com/2013/02/18/use-bower-with-heroku/"/>
+    <id>http://xseignard.github.com/2013/02/18/use-bower-with-heroku/</id>
+    <published>2013-02-18T14:33:26.000Z</published>
+    <updated>2013-02-18T16:25:54.000Z</updated>
+    <content type="html"><![CDATA[<p>Hello!</p>
+<p><a href="http://twitter.github.com/bower/">Bower</a> is pretty awsome! <a href="http://www.heroku.com/">Heroku</a> too!</p>
+<p>Use them together!</p>
+<p>Without creating your own Heroku <a href="https://devcenter.heroku.com/articles/buildpacks">buildpack</a>, you can achieve that quite easily.</p>
+<p>Just add a dependency to Bower in your <code>package.json</code> and then rely on the <code>npm scripts</code> to execute a <code>postinstall</code> command (<a href="https://npmjs.org/doc/scripts.html">https://npmjs.org/doc/scripts.html</a>).</p>
+<p>So you&#39;ll end up with somthing like this in your <code>package.json</code>:</p>
+<pre><code><div class="line"><span class="string">"dependencies"</span>: {</div><div class="line">    <span class="string">"bower"</span>: <span class="string">"0.6.x"</span></div><div class="line">},</div><div class="line"><span class="string">"scripts"</span>: {</div><div class="line">    <span class="string">"postinstall"</span>: <span class="string">"./node_modules/bower/bin/bower install"</span></div><div class="line">}</div></code></pre>
+
+<p>And that&#39;s it! Heroku will run a <code>npm install</code> that will execute the <code>bower install</code>.</p>
+<p><em>Pros:</em> one command to rule them all.</p>
+<p><em>Cons:</em> you unnecessarily embed bower as a dependency.</p>
+]]></content>
+    <category scheme="http://xseignard.github.com/tags/js/" term="js"/>
+    <category scheme="http://xseignard.github.com/tags/node/" term="node"/>
+    <category scheme="http://xseignard.github.com/tags/bower/" term="bower"/>
+  </entry>
+</feed>
