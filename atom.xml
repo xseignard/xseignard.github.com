@@ -4,7 +4,7 @@
   <subtitle><![CDATA[show me some code]]></subtitle>
   <link href="http://xseignard.github.com/atom.xml" rel="self"/>
   <link href="http://xseignard.github.com"/>
-  <updated>2013-02-18T20:42:38.208Z</updated>
+  <updated>2013-02-19T01:28:36.838Z</updated>
   <id>http://xseignard.github.com/</id>
   <author>
     <name><![CDATA[xavier]]></name>
@@ -16,7 +16,7 @@
     <link href="http://xseignard.github.com/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/"/>
     <id>http://xseignard.github.com/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/</id>
     <published>2013-02-18T19:01:23.000Z</published>
-    <updated>2013-02-18T20:42:35.000Z</updated>
+    <updated>2013-02-19T01:28:31.000Z</updated>
     <content type="html"><![CDATA[<p>Cloud services helps the developer to focus on the code. In one or two commands you get a running server, a CI engine, <em>etc</em>.</p>
 <p>I wont present you Gihtub, Travis or Heroku, if you&#39;re not aware of them, just check their websites!</p>
 <h1>Prerequisites</h1>
@@ -38,7 +38,7 @@
 
 <p>Running the above command will add your encrypted token to your <code>.travis.yml</code>.</p>
 <p>Open it and you should see something like this:</p>
-<pre><code><div class="line"><span class="method">env:</span> </div><div class="line">  <span class="method">global:</span> </div><div class="line">  - <span class="method">secure:</span> <span class="class">YOUR_ENCRYPTED_KEY</span></div></code></pre>
+<pre><code><div class="line"><span class="method">env:</span> </div><div class="line">  <span class="method">global:</span> </div><div class="line">  - <span class="method">secure:</span> <span class="class">YOUR_ENCRYPTED_TOKEN</span></div></code></pre>
 
 <p>Travis will decrypt it during the build, and be able to authenticate itself with Heroku.</p>
 <h1>Plug the pipe between Travis and Heroku</h1>
@@ -49,7 +49,7 @@
 <p>This will install the Heroku toolbelt, and then configure your Travis worker to communicate with Heroku and finally push your code to it!</p>
 <p>And you&#39;re done! Now everytime you push your code to Github, Travis will build/test it and deploy it to Heroku!</p>
 <p>Here is the whole <code>.travis.yml</code>:</p>
-<pre><code><div class="line">--- </div><div class="line"><span class="label">language:</span> node_js</div><div class="line"><span class="label">env:</span> </div><div class="line">  global: </div><div class="line">  - secure: YOUR_ENCRYPTED_KEY</div><div class="line"><span class="label">after_success:</span></div><div class="line">  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh</div><div class="line">  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span></div><div class="line">  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - yes | heroku keys:<span class="keyword">add</span></div><div class="line">  - yes | git <span class="keyword">push</span> heroku master</div><div class="line"><span class="label">node_js:</span> </div><div class="line">- <span class="number">0.8</span></div></code></pre>
+<pre><code><div class="line">--- </div><div class="line"><span class="label">language:</span> node_js</div><div class="line"><span class="label">env:</span> </div><div class="line">  global: </div><div class="line">  - secure: YOUR_ENCRYPTED_TOKEN</div><div class="line"><span class="label">after_success:</span></div><div class="line">  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh</div><div class="line">  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span></div><div class="line">  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - yes | heroku keys:<span class="keyword">add</span></div><div class="line">  - yes | git <span class="keyword">push</span> heroku master</div><div class="line"><span class="label">node_js:</span> </div><div class="line">- <span class="number">0.8</span></div></code></pre>
 ]]></content>
     <category scheme="http://xseignard.github.com/tags/github/" term="github"/>
     <category scheme="http://xseignard.github.com/tags/node/" term="node"/>
