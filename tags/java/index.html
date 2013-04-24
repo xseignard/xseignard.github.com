@@ -1,99 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title><![CDATA[/dev/xavier]]></title>
-  <subtitle><![CDATA[show me some code]]></subtitle>
-  <link href="http://xseignard.github.com/atom.xml" rel="self"/>
-  <link href="http://xseignard.github.com"/>
-  <updated>2013-04-24T11:34:13.691Z</updated>
-  <id>http://xseignard.github.com/</id>
-  <author>
-    <name><![CDATA[xavier]]></name>
-    <email><![CDATA[xavier.seignard@gmail.com]]></email>
-  </author>
-  <generator uri="http://zespia.tw/hexo">Hexo</generator>
-  <entry>
-    <title type="html"><![CDATA[Continuous deployement with Github, Travis and Heroku for Node.js]]></title>
-    <link href="http://xseignard.github.com/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/"/>
-    <id>http://xseignard.github.com/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/</id>
-    <published>2013-02-18T19:01:23.000Z</published>
-    <updated>2013-02-19T01:28:31.000Z</updated>
-    <content type="html"><![CDATA[<p>Cloud services helps the developer to focus on the code. In one or two commands you get a running server, a CI engine, <em>etc</em>.</p>
-<p>I wont present you Gihtub, Travis or Heroku, if you&#39;re not aware of them, just check their websites!</p>
-<h1>Prerequisites</h1>
-<p>You need the following to be installed on your machine:</p>
-<ul>
-<li>the <a href="https://toolbelt.heroku.com/">Heroku toolbelt</a>.</li>
-<li>the <a href="https://rubygems.org/">RubyGem</a> tool.</li>
-</ul>
-<h1>Setting all this up</h1>
-<p>First of all, you have to get your auth token from Heroku :</p>
-<pre><code>token=<span class="char">$(</span>heroku <span class="method">auth:</span>token)
-</code></pre>
 
-<p>This will store the token, and keep it for later.</p>
-<p>Then, install the Travis CLI tool:</p>
-<pre><code>su<span class="operator"><span class="keyword">do</span> gem install travis
-</code></pre>
 
-<p>You now have the Travis CLI tool installed. This will help you to encrypt your Heroku token.</p>
-<pre><code><span class="title">travis</span> encrypt HEROKU_API_KEY=<span class="variable">$token</span> --add
-</code></pre>
 
-<p>Running the above command will add your encrypted token to your <code>.travis.yml</code>.</p>
-<p>Open it and you should see something like this:</p>
-<pre><code><span class="method">env:</span> 
-  <span class="method">global:</span> 
-  - <span class="method">secure:</span> <span class="class">YOUR_ENCRYPTED_TOKEN</span>
-</code></pre>
+<h2 class="archive-title tag">java</h2>
 
-<p>Travis will decrypt it during the build, and be able to authenticate itself with Heroku.</p>
-<h1>Plug the pipe between Travis and Heroku</h1>
-<p>Now you need to tell Travis to deploy your app to Heroku after a succesful build.</p>
-<p>Luckily, Travis can handle it through its <a href="http://about.travis-ci.org/docs/user/build-configuration/#Build-Lifecycle">build lifecycle</a>.</p>
-<p>Just add the following to your <code>.travis.yml</code> (don&#39;t forget to <strong>replace</strong> HEROKU_APP_NAME!):</p>
-<pre><code><span class="label">after_success:</span>
-  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
-  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
-  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - yes | heroku keys:<span class="keyword">add</span>
-  - yes | git <span class="keyword">push</span> heroku master
-</code></pre>
-<p>This will install the Heroku toolbelt, and then configure your Travis worker to communicate with Heroku and finally push your code to it!</p>
-<p>And you&#39;re done! Now everytime you push your code to Github, Travis will build/test it and deploy it to Heroku!</p>
-<p>Here is the whole <code>.travis.yml</code>:</p>
-<pre><code>--- 
-<span class="label">language:</span> node_js
-<span class="label">env:</span> 
-  global: 
-  - secure: YOUR_ENCRYPTED_TOKEN
-<span class="label">after_success:</span>
-  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
-  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
-  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - yes | heroku keys:<span class="keyword">add</span>
-  - yes | git <span class="keyword">push</span> heroku master
-<span class="label">node_js:</span> 
-- <span class="number">0.8</span>
-</code></pre>
-]]></content>
-    <category scheme="http://xseignard.github.com/tags/github/" term="github"/>
-    <category scheme="http://xseignard.github.com/tags/node/" term="node"/>
-    <category scheme="http://xseignard.github.com/tags/travis/" term="travis"/>
-    <category scheme="http://xseignard.github.com/tags/heroku/" term="heroku"/>
-  </entry>
-  <entry>
-    <title type="html"><![CDATA[Processing and GPIOs on Raspberry Pi]]></title>
-    <link href="http://xseignard.github.com/2013/04/24/processing-and-gpios-on-raspberry-pi/"/>
-    <id>http://xseignard.github.com/2013/04/24/processing-and-gpios-on-raspberry-pi/</id>
-    <published>2013-04-24T09:49:12.000Z</published>
-    <updated>2013-04-24T11:33:39.000Z</updated>
-    <content type="html"><![CDATA[<p>Hello,</p>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-04-24T09:49:12.000Z"><a href="/2013/04/24/processing-and-gpios-on-raspberry-pi/">Apr 24 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/04/24/processing-and-gpios-on-raspberry-pi/">Processing and GPIOs on Raspberry Pi</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Hello,</p>
 <p><a href="http://www.processing.org/">Processing</a> is a nice <em>programming language</em> for creative coding, and you can physically interact with the <a href="http://www.raspberrypi.org/">Raspberry Pi</a> thanks to its GPIOs. So why not combining them?</p>
 <p>Let&#39;s do it.</p>
 <h1>Prerequisites</h1>
@@ -221,37 +149,28 @@ GpioPinDigitalInput button;
 <img src="http://pi4j.com/images/gpio-listener-example.png" alt=""></p>
 <p>If you try to run it, you&#39;ll face some permission issues since Pi4J require root privileges to access GPIOs. For now I export the application and run it with <code>sudo</code> to bypass it. It should exist a cleaner way to handle it. I&#39;ll update this post with a proper solution if there is.</p>
 <p>You are ready to poop some creative code! Enjoy!</p>
-]]></content>
-    <category scheme="http://xseignard.github.com/tags/processing/" term="processing"/>
-    <category scheme="http://xseignard.github.com/tags/java/" term="java"/>
-    <category scheme="http://xseignard.github.com/tags/raspberry/" term="raspberry"/>
-  </entry>
-  <entry>
-    <title type="html"><![CDATA[Use bower with heroku]]></title>
-    <link href="http://xseignard.github.com/2013/02/18/use-bower-with-heroku/"/>
-    <id>http://xseignard.github.com/2013/02/18/use-bower-with-heroku/</id>
-    <published>2013-02-18T14:33:26.000Z</published>
-    <updated>2013-02-18T16:25:54.000Z</updated>
-    <content type="html"><![CDATA[<p>Hello!</p>
-<p><a href="http://twitter.github.com/bower/">Bower</a> is pretty awsome! <a href="http://www.heroku.com/">Heroku</a> too!</p>
-<p>Use them together!</p>
-<p>Without creating your own Heroku <a href="https://devcenter.heroku.com/articles/buildpacks">buildpack</a>, you can achieve that quite easily.</p>
-<p>Just add a dependency to Bower in your <code>package.json</code> and then rely on the <code>npm scripts</code> to execute a <code>postinstall</code> command (<a href="https://npmjs.org/doc/scripts.html">https://npmjs.org/doc/scripts.html</a>).</p>
-<p>So you&#39;ll end up with somthing like this in your <code>package.json</code>:</p>
-<pre><code><span class="string">"dependencies"</span>: {
-    <span class="string">"bower"</span>: <span class="string">"0.6.x"</span>
-},
-<span class="string">"scripts"</span>: {
-    <span class="string">"postinstall"</span>: <span class="string">"./node_modules/bower/bin/bower install"</span>
-}
-</code></pre>
 
-<p>And that&#39;s it! Heroku will run a <code>npm install</code> that will execute the <code>bower install</code>.</p>
-<p><em>Pros:</em> one command to rule them all.</p>
-<p><em>Cons:</em> you unnecessarily embed bower as a dependency.</p>
-]]></content>
-    <category scheme="http://xseignard.github.com/tags/js/" term="js"/>
-    <category scheme="http://xseignard.github.com/tags/node/" term="node"/>
-    <category scheme="http://xseignard.github.com/tags/bower/" term="bower"/>
-  </entry>
-</feed>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/04/24/processing-and-gpios-on-raspberry-pi/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>

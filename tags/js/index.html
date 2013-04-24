@@ -133,7 +133,13 @@
 <p>Without creating your own Heroku <a href="https://devcenter.heroku.com/articles/buildpacks">buildpack</a>, you can achieve that quite easily.</p>
 <p>Just add a dependency to Bower in your <code>package.json</code> and then rely on the <code>npm scripts</code> to execute a <code>postinstall</code> command (<a href="https://npmjs.org/doc/scripts.html">https://npmjs.org/doc/scripts.html</a>).</p>
 <p>So you&#39;ll end up with somthing like this in your <code>package.json</code>:</p>
-<pre><code><div class="line"><span class="string">"dependencies"</span>: {</div><div class="line">    <span class="string">"bower"</span>: <span class="string">"0.6.x"</span></div><div class="line">},</div><div class="line"><span class="string">"scripts"</span>: {</div><div class="line">    <span class="string">"postinstall"</span>: <span class="string">"./node_modules/bower/bin/bower install"</span></div><div class="line">}</div></code></pre>
+<pre><code><span class="string">"dependencies"</span>: {
+    <span class="string">"bower"</span>: <span class="string">"0.6.x"</span>
+},
+<span class="string">"scripts"</span>: {
+    <span class="string">"postinstall"</span>: <span class="string">"./node_modules/bower/bin/bower install"</span>
+}
+</code></pre>
 
 <p>And that&#39;s it! Heroku will run a <code>npm install</code> that will execute the <code>bower install</code>.</p>
 <p><em>Pros:</em> one command to rule them all.</p>
@@ -143,6 +149,10 @@
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2013/02/18/use-bower-with-heroku/#more" class="more-link">Read More</a>
+          </div>
         
         
       
@@ -175,17 +185,23 @@
   <h3 class="title">Tags</h3>
   <ul class="entry">
   
-    <li><a href="/tags/bower/">bower</a><small>1</small></li>
-  
     <li><a href="/tags/github/">github</a><small>1</small></li>
+  
+    <li><a href="/tags/node/">node</a><small>2</small></li>
+  
+    <li><a href="/tags/travis/">travis</a><small>1</small></li>
   
     <li><a href="/tags/heroku/">heroku</a><small>1</small></li>
   
     <li><a href="/tags/js/">js</a><small>1</small></li>
   
-    <li><a href="/tags/node/">node</a><small>2</small></li>
+    <li><a href="/tags/bower/">bower</a><small>1</small></li>
   
-    <li><a href="/tags/travis/">travis</a><small>1</small></li>
+    <li><a href="/tags/processing/">processing</a><small>1</small></li>
+  
+    <li><a href="/tags/java/">java</a><small>1</small></li>
+  
+    <li><a href="/tags/raspberry/">raspberry</a><small>1</small></li>
   
   </ul>
 </div>

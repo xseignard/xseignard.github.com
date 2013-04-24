@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2013/02 | /dev/xavier</title>
+  <title>Archives: 2013/2 | /dev/xavier</title>
   <meta name="author" content="xavier">
   
   
@@ -107,7 +107,7 @@
     <div id="main-col" class="alignleft"><div id="wrapper">
 
 
-<h2 class="archive-title">2013/02</h2>
+<h2 class="archive-title">2013/2</h2>
 
 
   
@@ -137,34 +137,69 @@
 </ul>
 <h1>Setting all this up</h1>
 <p>First of all, you have to get your auth token from Heroku :</p>
-<pre><code><div class="line">token=<span class="char">$(</span>heroku <span class="method">auth:</span>token)</div></code></pre>
+<pre><code>token=<span class="char">$(</span>heroku <span class="method">auth:</span>token)
+</code></pre>
 
 <p>This will store the token, and keep it for later.</p>
 <p>Then, install the Travis CLI tool:</p>
-<pre><code><div class="line">su<span class="operator"><span class="keyword">do</span> gem install travis</div></code></pre>
+<pre><code>su<span class="operator"><span class="keyword">do</span> gem install travis
+</code></pre>
 
 <p>You now have the Travis CLI tool installed. This will help you to encrypt your Heroku token.</p>
-<pre><code><div class="line"><span class="title">travis</span> encrypt HEROKU_API_KEY=<span class="variable">$token</span> --add</div></code></pre>
+<pre><code><span class="title">travis</span> encrypt HEROKU_API_KEY=<span class="variable">$token</span> --add
+</code></pre>
 
 <p>Running the above command will add your encrypted token to your <code>.travis.yml</code>.</p>
 <p>Open it and you should see something like this:</p>
-<pre><code><div class="line"><span class="method">env:</span> </div><div class="line">  <span class="method">global:</span> </div><div class="line">  - <span class="method">secure:</span> <span class="class">YOUR_ENCRYPTED_TOKEN</span></div></code></pre>
+<pre><code><span class="method">env:</span> 
+  <span class="method">global:</span> 
+  - <span class="method">secure:</span> <span class="class">YOUR_ENCRYPTED_TOKEN</span>
+</code></pre>
 
 <p>Travis will decrypt it during the build, and be able to authenticate itself with Heroku.</p>
 <h1>Plug the pipe between Travis and Heroku</h1>
 <p>Now you need to tell Travis to deploy your app to Heroku after a succesful build.</p>
 <p>Luckily, Travis can handle it through its <a href="http://about.travis-ci.org/docs/user/build-configuration/#Build-Lifecycle">build lifecycle</a>.</p>
 <p>Just add the following to your <code>.travis.yml</code> (don&#39;t forget to <strong>replace</strong> HEROKU_APP_NAME!):</p>
-<pre><code><div class="line"><span class="label">after_success:</span></div><div class="line">  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh</div><div class="line">  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span></div><div class="line">  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - yes | heroku keys:<span class="keyword">add</span></div><div class="line">  - yes | git <span class="keyword">push</span> heroku master</div></code></pre>
+<pre><code><span class="label">after_success:</span>
+  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
+  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
+  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - yes | heroku keys:<span class="keyword">add</span>
+  - yes | git <span class="keyword">push</span> heroku master
+</code></pre>
 <p>This will install the Heroku toolbelt, and then configure your Travis worker to communicate with Heroku and finally push your code to it!</p>
 <p>And you&#39;re done! Now everytime you push your code to Github, Travis will build/test it and deploy it to Heroku!</p>
 <p>Here is the whole <code>.travis.yml</code>:</p>
-<pre><code><div class="line">--- </div><div class="line"><span class="label">language:</span> node_js</div><div class="line"><span class="label">env:</span> </div><div class="line">  global: </div><div class="line">  - secure: YOUR_ENCRYPTED_TOKEN</div><div class="line"><span class="label">after_success:</span></div><div class="line">  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh</div><div class="line">  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span></div><div class="line">  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config</div><div class="line">  - yes | heroku keys:<span class="keyword">add</span></div><div class="line">  - yes | git <span class="keyword">push</span> heroku master</div><div class="line"><span class="label">node_js:</span> </div><div class="line">- <span class="number">0.8</span></div></code></pre>
+<pre><code>--- 
+<span class="label">language:</span> node_js
+<span class="label">env:</span> 
+  global: 
+  - secure: YOUR_ENCRYPTED_TOKEN
+<span class="label">after_success:</span>
+  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
+  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
+  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
+  - yes | heroku keys:<span class="keyword">add</span>
+  - yes | git <span class="keyword">push</span> heroku master
+<span class="label">node_js:</span> 
+- <span class="number">0.8</span>
+</code></pre>
 
       
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/#more" class="more-link">Read More</a>
+          </div>
         
         
       
@@ -197,7 +232,13 @@
 <p>Without creating your own Heroku <a href="https://devcenter.heroku.com/articles/buildpacks">buildpack</a>, you can achieve that quite easily.</p>
 <p>Just add a dependency to Bower in your <code>package.json</code> and then rely on the <code>npm scripts</code> to execute a <code>postinstall</code> command (<a href="https://npmjs.org/doc/scripts.html">https://npmjs.org/doc/scripts.html</a>).</p>
 <p>So you&#39;ll end up with somthing like this in your <code>package.json</code>:</p>
-<pre><code><div class="line"><span class="string">"dependencies"</span>: {</div><div class="line">    <span class="string">"bower"</span>: <span class="string">"0.6.x"</span></div><div class="line">},</div><div class="line"><span class="string">"scripts"</span>: {</div><div class="line">    <span class="string">"postinstall"</span>: <span class="string">"./node_modules/bower/bin/bower install"</span></div><div class="line">}</div></code></pre>
+<pre><code><span class="string">"dependencies"</span>: {
+    <span class="string">"bower"</span>: <span class="string">"0.6.x"</span>
+},
+<span class="string">"scripts"</span>: {
+    <span class="string">"postinstall"</span>: <span class="string">"./node_modules/bower/bin/bower install"</span>
+}
+</code></pre>
 
 <p>And that&#39;s it! Heroku will run a <code>npm install</code> that will execute the <code>bower install</code>.</p>
 <p><em>Pros:</em> one command to rule them all.</p>
@@ -207,6 +248,10 @@
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2013/02/18/use-bower-with-heroku/#more" class="more-link">Read More</a>
+          </div>
         
         
       
@@ -239,17 +284,23 @@
   <h3 class="title">Tags</h3>
   <ul class="entry">
   
-    <li><a href="/tags/bower/">bower</a><small>1</small></li>
-  
     <li><a href="/tags/github/">github</a><small>1</small></li>
+  
+    <li><a href="/tags/node/">node</a><small>2</small></li>
+  
+    <li><a href="/tags/travis/">travis</a><small>1</small></li>
   
     <li><a href="/tags/heroku/">heroku</a><small>1</small></li>
   
     <li><a href="/tags/js/">js</a><small>1</small></li>
   
-    <li><a href="/tags/node/">node</a><small>2</small></li>
+    <li><a href="/tags/bower/">bower</a><small>1</small></li>
   
-    <li><a href="/tags/travis/">travis</a><small>1</small></li>
+    <li><a href="/tags/processing/">processing</a><small>1</small></li>
+  
+    <li><a href="/tags/java/">java</a><small>1</small></li>
+  
+    <li><a href="/tags/raspberry/">raspberry</a><small>1</small></li>
   
   </ul>
 </div>
