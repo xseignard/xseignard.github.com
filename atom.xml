@@ -4,7 +4,7 @@
   <subtitle><![CDATA[show me some code]]></subtitle>
   <link href="http://xseignard.github.io/atom.xml" rel="self"/>
   <link href="http://xseignard.github.io"/>
-  <updated>2013-05-17T10:06:14.366Z</updated>
+  <updated>2013-05-17T10:23:44.978Z</updated>
   <id>http://xseignard.github.io/</id>
   <author>
     <name><![CDATA[@xavier_seignard]]></name>
@@ -259,7 +259,7 @@ GpioPinDigitalInput button;
     <link href="http://xseignard.github.io/2013/04/25/quality-analysis-on-node.js-projects-with-mocha-istanbul-and-sonar/"/>
     <id>http://xseignard.github.io/2013/04/25/quality-analysis-on-node.js-projects-with-mocha-istanbul-and-sonar/</id>
     <published>2013-04-25T08:38:41.000Z</published>
-    <updated>2013-05-17T10:04:05.000Z</updated>
+    <updated>2013-05-17T10:22:59.000Z</updated>
     <content type="html"><![CDATA[<p>Hello,</p>
 <p>What about having a nice dashboard for the code quality of your project? <a href="http://www.sonarsource.org">Sonar</a> is a well known open source tool to handle that.</p>
 <p>It handles a wide range of programming languages, from COBOL to Javascript. So let&#39;s give a try to run Sonar on Node.js projects!</p>
