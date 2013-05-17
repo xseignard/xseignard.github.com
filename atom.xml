@@ -2,19 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title><![CDATA[/dev/xavier]]></title>
   <subtitle><![CDATA[show me some code]]></subtitle>
-  <link href="http://xseignard.github.com/atom.xml" rel="self"/>
-  <link href="http://xseignard.github.com"/>
-  <updated>2013-04-25T11:27:08.323Z</updated>
-  <id>http://xseignard.github.com/</id>
+  <link href="http://xseignard.github.io/atom.xml" rel="self"/>
+  <link href="http://xseignard.github.io"/>
+  <updated>2013-05-17T10:06:14.366Z</updated>
+  <id>http://xseignard.github.io/</id>
   <author>
-    <name><![CDATA[xavier]]></name>
+    <name><![CDATA[@xavier_seignard]]></name>
     <email><![CDATA[xavier.seignard@gmail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
   <entry>
     <title type="html"><![CDATA[Continuous deployement with Github, Travis and Heroku for Node.js]]></title>
-    <link href="http://xseignard.github.com/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/"/>
-    <id>http://xseignard.github.com/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/</id>
+    <link href="http://xseignard.github.io/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/"/>
+    <id>http://xseignard.github.io/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/</id>
     <published>2013-02-18T19:01:23.000Z</published>
     <updated>2013-02-19T01:28:31.000Z</updated>
     <content type="html"><![CDATA[<p>Cloud services helps the developer to focus on the code. In one or two commands you get a running server, a CI engine, <em>etc</em>.</p>
@@ -82,15 +82,15 @@
 - <span class="number">0.8</span>
 </code></pre>
 ]]></content>
-    <category scheme="http://xseignard.github.com/tags/github/" term="github"/>
-    <category scheme="http://xseignard.github.com/tags/node/" term="node"/>
-    <category scheme="http://xseignard.github.com/tags/travis/" term="travis"/>
-    <category scheme="http://xseignard.github.com/tags/heroku/" term="heroku"/>
+    <category scheme="http://xseignard.github.io/tags/github/" term="github"/>
+    <category scheme="http://xseignard.github.io/tags/node/" term="node"/>
+    <category scheme="http://xseignard.github.io/tags/travis/" term="travis"/>
+    <category scheme="http://xseignard.github.io/tags/heroku/" term="heroku"/>
   </entry>
   <entry>
     <title type="html"><![CDATA[Processing and GPIOs on Raspberry Pi]]></title>
-    <link href="http://xseignard.github.com/2013/04/24/processing-and-gpios-on-raspberry-pi/"/>
-    <id>http://xseignard.github.com/2013/04/24/processing-and-gpios-on-raspberry-pi/</id>
+    <link href="http://xseignard.github.io/2013/04/24/processing-and-gpios-on-raspberry-pi/"/>
+    <id>http://xseignard.github.io/2013/04/24/processing-and-gpios-on-raspberry-pi/</id>
     <published>2013-04-24T09:49:12.000Z</published>
     <updated>2013-04-24T11:33:39.000Z</updated>
     <content type="html"><![CDATA[<p>Hello,</p>
@@ -222,14 +222,14 @@ GpioPinDigitalInput button;
 <p>If you try to run it, you&#39;ll face some permission issues since Pi4J require root privileges to access GPIOs. For now I export the application and run it with <code>sudo</code> to bypass it. It should exist a cleaner way to handle it. I&#39;ll update this post with a proper solution if there is.</p>
 <p>You are ready to poop some creative code! Enjoy!</p>
 ]]></content>
-    <category scheme="http://xseignard.github.com/tags/processing/" term="processing"/>
-    <category scheme="http://xseignard.github.com/tags/java/" term="java"/>
-    <category scheme="http://xseignard.github.com/tags/raspberry/" term="raspberry"/>
+    <category scheme="http://xseignard.github.io/tags/processing/" term="processing"/>
+    <category scheme="http://xseignard.github.io/tags/java/" term="java"/>
+    <category scheme="http://xseignard.github.io/tags/raspberry/" term="raspberry"/>
   </entry>
   <entry>
     <title type="html"><![CDATA[Use bower with heroku]]></title>
-    <link href="http://xseignard.github.com/2013/02/18/use-bower-with-heroku/"/>
-    <id>http://xseignard.github.com/2013/02/18/use-bower-with-heroku/</id>
+    <link href="http://xseignard.github.io/2013/02/18/use-bower-with-heroku/"/>
+    <id>http://xseignard.github.io/2013/02/18/use-bower-with-heroku/</id>
     <published>2013-02-18T14:33:26.000Z</published>
     <updated>2013-02-18T16:25:54.000Z</updated>
     <content type="html"><![CDATA[<p>Hello!</p>
@@ -250,16 +250,16 @@ GpioPinDigitalInput button;
 <p><em>Pros:</em> one command to rule them all.</p>
 <p><em>Cons:</em> you unnecessarily embed bower as a dependency.</p>
 ]]></content>
-    <category scheme="http://xseignard.github.com/tags/js/" term="js"/>
-    <category scheme="http://xseignard.github.com/tags/node/" term="node"/>
-    <category scheme="http://xseignard.github.com/tags/bower/" term="bower"/>
+    <category scheme="http://xseignard.github.io/tags/js/" term="js"/>
+    <category scheme="http://xseignard.github.io/tags/node/" term="node"/>
+    <category scheme="http://xseignard.github.io/tags/bower/" term="bower"/>
   </entry>
   <entry>
     <title type="html"><![CDATA[Quality analysis on Node.js projects with Mocha, Istanbul and Sonar]]></title>
-    <link href="http://xseignard.github.com/2013/04/25/quality-analysis-on-node.js-projects-with-mocha-istanbul-and-sonar/"/>
-    <id>http://xseignard.github.com/2013/04/25/quality-analysis-on-node.js-projects-with-mocha-istanbul-and-sonar/</id>
+    <link href="http://xseignard.github.io/2013/04/25/quality-analysis-on-node.js-projects-with-mocha-istanbul-and-sonar/"/>
+    <id>http://xseignard.github.io/2013/04/25/quality-analysis-on-node.js-projects-with-mocha-istanbul-and-sonar/</id>
     <published>2013-04-25T08:38:41.000Z</published>
-    <updated>2013-04-25T11:25:53.000Z</updated>
+    <updated>2013-05-17T10:04:05.000Z</updated>
     <content type="html"><![CDATA[<p>Hello,</p>
 <p>What about having a nice dashboard for the code quality of your project? <a href="http://www.sonarsource.org">Sonar</a> is a well known open source tool to handle that.</p>
 <p>It handles a wide range of programming languages, from COBOL to Javascript. So let&#39;s give a try to run Sonar on Node.js projects!</p>
@@ -391,9 +391,9 @@ sonar<span class="variable">.javascript</span><span class="variable">.lcov</span
 </ul>
 <p>Have fun.</p>
 ]]></content>
-    <category scheme="http://xseignard.github.com/tags/node/" term="node"/>
-    <category scheme="http://xseignard.github.com/tags/mocha/" term="mocha"/>
-    <category scheme="http://xseignard.github.com/tags/istanbul/" term="istanbul"/>
-    <category scheme="http://xseignard.github.com/tags/sonar/" term="sonar"/>
+    <category scheme="http://xseignard.github.io/tags/node/" term="node"/>
+    <category scheme="http://xseignard.github.io/tags/mocha/" term="mocha"/>
+    <category scheme="http://xseignard.github.io/tags/istanbul/" term="istanbul"/>
+    <category scheme="http://xseignard.github.io/tags/sonar/" term="sonar"/>
   </entry>
 </feed>

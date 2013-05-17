@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   
   <title>Quality analysis on Node.js projects with Mocha, Istanbul and Sonar | /dev/xavier</title>
-  <meta name="author" content="xavier">
+  <meta name="author" content="@xavier_seignard">
   
   <meta name="description" content="Hello,
 What about having a nice dashboard for the code quality of your project? Sonar is a well known open source tool to handle that.
@@ -143,6 +143,146 @@ Have fun.">
   <meta property="og:title" content="Quality analysis on Node.js projects with Mocha, Istanbul and Sonar"/>
   <meta property="og:site_name" content="/dev/xavier"/>
 
+  <!-- TWITTER CARD -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:site" content="@xavier_seignard"/>
+  <meta property="twitter:creator" content="@xavier_seignard"/>
+  <meta property="twitter:title" content="Quality analysis on Node.js projects with Mocha, Istanbul and Sonar"/>
+  
+  <meta name="twitter:description" content="Hello,
+What about having a nice dashboard for the code quality of your project? Sonar is a well known open source tool to handle that.
+It handles a wide range of programming languages, from COBOL to Javascript. So let&amp;#39;s give a try to run Sonar on Node.js projects!
+Prerequisites
+
+I will cover the use of Sonar with Mocha and Istanbul, my tools of choice when it comes to js testing. But if you are able to generate xunit ans lcov reports from your test suite, chances the stuff I describe here will also work.
+You need to install Sonar : http://docs.codehaus.org/display/SONAR/Installation+and+Upgrade
+And the Sonar Javascript plugin : http://docs.codehaus.org/display/SONAR/JavaScript+Plugin
+You&amp;#39;ll also need Make : http://www.gnu.org/software/make/ which is the build tool I use for Node.js (we could use Grunt, but I still need good arguments to switch to it for node.js, if you have some let me know!)
+
+Testing with Mocha
+Mocha has a lot of built-in functionalities and is extensible. We&amp;#39;ll see this point will be really important. Because of its extensibility, you can output your tests results in various formats. If you don&amp;#39;t know Mocha, you should give it a try!
+So far, Sonar only handles the xunit format as input, so you need a Mocha reporter that can handle it. There is a bundled reporter in Mocha that achieve that, but you need to pipe the console output to the xunit file by yourself. 
+You could also use the following reporter plugin that does the work for you : https://github.com/peerigon/xunit-file
+So install it : npm install xunit-file --save-dev and then it&amp;#39;s just a matter of setting an environment variable during the build to tell where to output the file.
+So the xunit task in my Makefile look like this :
+xunit:
+	@# check if reports folder exists, if not create it
+	@test -d reports || mkdir reports
+	XUNIT_FILE=&quot;reports/TESTS-xunit.xml&quot; $(MOCHA) -R xunit-file $(TESTS)
+
+
+Where $(TESTS) is the list of tests. Since I use a convention to name my tests (they always end with .test.js) I can retrieve them easily.
+TESTS=$(shell find test/ -name &quot;*.test.js&quot;)
+
+
+And $(MOCHA) points to the mocha binary. I tend to install the tools I use inside the project rather than globally, it let me handle specific version of them for each project and gives the project some portability. But I don&amp;#39;t know if it&amp;#39;s a good practice or not. Feel free to drop a comment!
+MOCHA=node_modules/.bin/mocha
+
+
+You may have noticed the weird name I gave to the xunit output file : TESTS-xunit.xml, it&amp;#39;s really important it starts with TESTS! If not, you won&amp;#39;t be able to gather tests metrics in Sonar. 
+If you dig into the code of Sonar, here is why : https://github.com/SonarSource/sonar-java/blob/master/sonar-surefire-plugin/src/main/java/org/sonar/plugins/surefire/api/AbstractSurefireParser.java#L67
+You now have a test report ready to be consumed by Sonar (and Jenkins too if you want!).
+Code coverage with Istanbul
+Istanbul is the new cool kid when it comes to code coverage. And it is pretty simple to use! 
+
+Instrument your code
+Run your mocha tests against this instrumented code with the right reporter
+That&amp;#39;s it
+
+Instrumenting your code is just a single Istanbul command:
+$(ISTANBUL) instrument --output src-cov src
+
+
+This will create a src-cov folder with the instrumented version of your code (provided your code is in the src folder).
+You then have to run your tests against the instrumented code, so your tests need to depend on this new code. To achieve that, I move my original sources in another folder and replace them with the instrumented ones. Just a matter of 2 shell commands.
+@# move original src code and replace it by the instrumented one
+mv src src-orig &amp;&amp; mv src-cov src
+
+
+Now you can run your tests, with the right reporter and tell Istanbul to only produce lcov file since it&amp;#39;s the only one we need for Sonar.
+I use the nice mocha-istanbul reporter, that leverage the use of both tools, clean and easy. Install it.
+npm install mocha-istanbul --save-dev
+
+
+You can now run the code coverage info generation.
+ISTANBUL_REPORTERS=lcovonly $(MOCHA) -R mocha-istanbul $(TESTS)
+
+
+You now have a lcov.info file ready to be eaten by Sonar. (I move it to reports/coverage.lcov for personal convenience, but there&amp;#39;s no need.)
+Don&amp;#39;t forget to put back your original sources in place!
+rm -rf src
+mv src-orig src
+
+
+Here is the full Makefile task:
+coverage:
+	@# check if reports folder exists, if not create it
+	@test -d reports || mkdir reports
+	$(ISTANBUL) instrument --output src-cov src
+	@# move original src code and replace it by the instrumented one
+	mv src src-orig &amp;&amp; mv src-cov src
+	@# tell istanbul to only generate the lcov file
+	ISTANBUL_REPORTERS=lcovonly $(MOCHA) -R mocha-istanbul $(TESTS)
+	@# place the lcov report in the report folder, remove instrumented code
+	@# and reput src at its place
+	mv lcov.info reports/coverage.lcov
+	rm -rf src
+	mv src-orig src
+
+
+Sonar
+Sonar analysis can be performed in various ways (ant, maven, sonar-runner). Even if i do like maven (yes I do!), there&amp;#39;s no way I&amp;#39;ll put a pom.xml in a node.js project.
+We&amp;#39;ll use the sonar-runner. 
+Download it : http://docs.codehaus.org/display/SONAR/Installing+and+Configuring+Sonar+Runner. But, for the sake of portability I prefer to embed it in my project rather than installing it (again, I don&amp;#39;t know if it&amp;#39;s a good practice, but it&amp;#39;s mine).
+Then, you need to configure a file at the root of your project that will drive the sonar analysis : sonar-project.properties. This file is really simple, it just tells Sonar where to find the reports we produced before and provide some general info about the project (see http://docs.codehaus.org/display/SONAR/JavaScript+Plugin).
+sonar.projectKey=sonar-js
+sonar.projectName=sonar-js
+sonar.projectVersion=0.0.1
+ 
+sonar.sources=src
+sonar.tests=test
+sonar.language=js
+sonar.profile=node
+
+sonar.dynamicAnalysis=reuseReports
+
+sonar.javascript.jstest.reportsPath=reports
+sonar.javascript.lcov.reportPath=reports/coverage.lcov
+
+
+The file speaks by itself: project info, project directory structure and tell Sonar to reuse already generated reports and where they are.
+Please note that i use a custom profile which is a set of coding rules my code will be tested against. If you don&amp;#39;t have this profile on your Sonar instance, you should delete the sonar.profile=node. Your code will be then tested against the default js profile, which is not really adapted for node.js. I&amp;#39;ll come back on that.
+So after you have the xunit and lcov file, you can run Sonar.
+Here is my task in the Makefile:
+sonar:
+	@# add the sonar sonar-runner executable to the PATH and run it
+	PATH=&quot;$$PWD/tools/sonar-runner-2.2/bin:$$PATH&quot; sonar-runner
+
+
+That&amp;#39;s it!
+Please note that the actual configuration in sonar-project.properties assumes the Sonar server is running on http://localhost:9000.
+You can change that by specifying the right values in sonar-project.properties (see http://docs.codehaus.org/display/SONAR/Analysis+Parameters).
+You can now browse your Sonar dashboard and see this nice report:
+
+In a glance, you can see the wealth of your project : tests results, code coverage, coding rules compliance, complexity, etc...
+You can then drill down in any metrics, to see where are the coding rules violations, which line is covered or not, etc. Just read about Sonar to see how powerful it is. You can even see how the metrics evolve between two analysis!
+Here is an example of code coverage report:
+
+You can find a dummy project on github that covers the ideas of this blog post : https://github.com/xseignard/sonar-js
+Notes
+I use a custom quality profile in Sonar for Node.js (you can find it here: https://github.com/xseignard/sonar-js/blob/master/tools/node_js.xml).
+You can install it following the docs: http://docs.codehaus.org/display/SONAR/Quality+profiles#QualityProfiles-BackupingRestoringProfile
+My profile is far from ideal, and can be discussed.
+As I told you at the beginning, if you can generate xunit and lcov formats, you&amp;#39;re good! So you can easily apply this technique to Angular projects, because of the mighty Karma runner, see :
+
+the reporters section in http://karma-runner.github.io/0.8/config/configuration-file.html
+the coverage page http://karma-runner.github.io/0.8/config/coverage.html
+
+Have fun.">
+  
+  <meta property="twitter:image" content="https://dl.dropboxusercontent.com/u/17657227/Info/blog/dashboard.png"/>
+  <!-- TWITTER CARD -->
+  
   <link href="/favicon.png" rel="icon">
   <link rel="alternate" href="/atom.xml" title="/dev/xavier" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
@@ -434,7 +574,7 @@ sonar<span class="variable">.javascript</span><span class="variable">.lcov</span
 <div class="search">
   <form action="http://google.com/search" method="get" accept-charset="utf-8">
     <input type="text" name="q" results="0" placeholder="Search">
-    <input type="hidden" name="q" value="site:xseignard.github.com">
+    <input type="hidden" name="q" value="site:xseignard.github.io">
   </form>
 </div>
 
@@ -491,7 +631,7 @@ var moment_js_path = '/js/moment.min.js';
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
   
-  &copy; 2013 xavier
+  &copy; 2013 @xavier_seignard
   
 </div>
 <div class="alignright">
