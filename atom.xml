@@ -4,7 +4,7 @@
   <subtitle><![CDATA[show me some code]]></subtitle>
   <link href="http://xseignard.github.io/atom.xml" rel="self"/>
   <link href="http://xseignard.github.io"/>
-  <updated>2013-05-17T11:08:54.037Z</updated>
+  <updated>2013-05-20T14:25:41.018Z</updated>
   <id>http://xseignard.github.io/</id>
   <author>
     <name><![CDATA[@xavier_seignard]]></name>
@@ -395,5 +395,91 @@ sonar<span class="variable">.javascript</span><span class="variable">.lcov</span
     <category scheme="http://xseignard.github.io/tags/mocha/" term="mocha"/>
     <category scheme="http://xseignard.github.io/tags/istanbul/" term="istanbul"/>
     <category scheme="http://xseignard.github.io/tags/sonar/" term="sonar"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[Plug your Minitel on your Raspberry Pi]]></title>
+    <link href="http://xseignard.github.io/2013/05/20/plug-your-minitel-on-your-raspberry-pi/"/>
+    <id>http://xseignard.github.io/2013/05/20/plug-your-minitel-on-your-raspberry-pi/</id>
+    <published>2013-05-20T11:07:21.000Z</published>
+    <updated>2013-05-20T14:25:34.000Z</updated>
+    <content type="html"><![CDATA[<p>Hi,</p>
+<p>So what is a Minitel? According to Wikipedia :</p>
+<blockquote>
+<p>The Minitel was a Videotex online service accessible through telephone lines, and is considered one of the world&#39;s most successful pre-World Wide Web online services.<a href="http://en.wikipedia.org/wiki/Minitel">¹</a> </p>
+</blockquote>
+<p>This service was accessible through particular devices. They had a screen, a keyboard and a modem.</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/minitel.jpg" alt=""></p>
+<p>A screen and a keyboard are just what we need for our Pi, so let&#39;s plug them together!</p>
+<h1>Minitel and serial communication</h1>
+<p>The Minitel have a serial port. It&#39;s goal is to communicate to peripherals such as a printer or whatever.</p>
+<p>The socket is a classic 180° DIN with 5 pins :</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/dinMinitel.JPG" alt=""></p>
+<p>Here is the description of the pins:</p>
+<ul>
+<li>1: Rx: data reception </li>
+<li>2: Ground</li>
+<li>3: Tx: data transmission</li>
+<li>4: Ready to work signal</li>
+<li>5: 8.5v - 1A power supply</li>
+</ul>
+<p>So pins 1,2 and 3 are what we need to communicate through serial with the Pi.</p>
+<p>Please note that not all Minitels have this kind of sockets. To find a compatible one, the Minitel must have this socket AND two special keys on the keyboard <code>Fnct</code> and <code>Ctrl</code>. They are usualy called <em>Minitel 1B</em>.</p>
+<h1>TTL levels and the Pi</h1>
+<p>The UART on the Pi works with 0v and 3.3v. But a lot of old stuff use 0v and 5v. This is the case of the Minitel, so we need to adapt the voltage levels :</p>
+<ul>
+<li>Lower the Tx level of the Minitel from 5v to 3.3v</li>
+<li>Raise the Tx level of the Pi from 3.3v to 5v</li>
+</ul>
+<p>To achieve that, I used the following schema based on the recommendation of <a href="https://twitter.com/lhuet35">@lhuet35</a> (thanks!). You can check its Devoxx presentation (in french) here : <a href="http://parleys.com/play/51599a1ee4b0ffdd7e058b6b/chapter0/about">3615 Cloud</a></p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/minitel.png" alt=""></p>
+<p>Be careful, the unused pin between the 5v and the GND of the Pi is not depicted on this schema!!</p>
+<p>Here is the stuff mounted on a breadboard :</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/minitelProto.JPG" alt=""></p>
+<h1>Configure a tty on the UART</h1>
+<p>You then need to configure a tty that will communicate through the UART.</p>
+<p>The following configuration is based on a Raspbian, but it should be the same on other distros.</p>
+<ul>
+<li>You may need to install <code>getty</code> :<ul>
+<li><code>sudo apt-get install getty</code></li>
+</ul>
+</li>
+<li>Backup the <code>/boot/cmdline.txt</code> file just in case :)<ul>
+<li><code>sudo cp /boot/cmdline.txt /boot/cmdline.bak.txt</code></li>
+</ul>
+</li>
+<li>Edit the file: <ul>
+<li><code>sudo vim /boot/cmdline.txt</code> </li>
+<li>and remove everything related to the serial port <code>ttyAMA0</code>, i.e. : <code>console=ttyAMA0,115200 kgdboc=ttyAMA0,115200</code></li>
+</ul>
+</li>
+<li>Add a <code>getty</code> conf on <code>/etc/inittab</code> :<ul>
+<li><code>7:2345:respawn:/sbin/getty ttyAMA0 4800v23</code></li>
+<li>also check there is no other <code>getty</code> conf for this tty on the file</li>
+</ul>
+</li>
+<li>Then you need to create a <code>gettydefs</code> file (or edit it)<ul>
+<li><code>sudo vim /etc/gettydefs</code></li>
+<li>and add the following <code>4800v23# B4800 CS7 PARENB -PARODD GLOBAL # B4800 ISTRIP CS7 PARENB -PARODD GLOBAL BRKINT IGNPAR ICRNL IXON IXANY OPOST ONLCR CREAD HUPCLISIG ICANON ECHO ECHOE ECHOK #@S login: #4800v23</code> on one line!</li>
+<li>this will configure the tty on UART</li>
+</ul>
+</li>
+</ul>
+<p>You can now plug the Pi to the Minitel and reboot the Pi.</p>
+<h1>Configure the Minitel</h1>
+<p>You need to switch the Minitel mode to be able to communicate through the serial port.</p>
+<ul>
+<li>Power on the Minitel</li>
+<li>Press <code>Fnct+T</code> then <code>A</code> : the Minitel will switch to the serial mode</li>
+<li>Press <code>Fnct+P</code> then <code>4</code> : the Minitel now communicate through serial at 4800bps (the max speed)</li>
+<li>Press <code>Fnct+T</code> then <code>E</code> : to deactivate the local echo</li>
+<li>Press <code>↵</code> and you should now see the login prompt (maybe with some white squares), put your login and you&#39;re done!</li>
+</ul>
+<p>Be aware that you&#39;ll need to do this Minitel configuration everytime you power it up.</p>
+<p>Here is a pic of my Minitel :</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/piMinitel.JPG" alt=""></p>
+<p>Happy coding!</p>
+]]></content>
+    <category scheme="http://xseignard.github.io/tags/DIY/" term="DIY"/>
+    <category scheme="http://xseignard.github.io/tags/raspberry/" term="raspberry"/>
   </entry>
 </feed>

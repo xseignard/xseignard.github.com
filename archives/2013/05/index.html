@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>github | /dev/xavier</title>
+  <title>Archives: 2013/5 | /dev/xavier</title>
   <meta name="author" content="@xavier_seignard">
   
   <meta name="description" content="show me some code!">
@@ -130,7 +130,7 @@
     <div id="main-col" class="alignleft"><div id="wrapper">
 
 
-<h2 class="archive-title tag">github</h2>
+<h2 class="archive-title">2013/5</h2>
 
 
   
@@ -140,80 +140,92 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-02-18T19:01:23.000Z"><a href="/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/">Feb 18 2013</a></time>
+        <time datetime="2013-05-20T11:07:21.000Z"><a href="/2013/05/20/plug-your-minitel-on-your-raspberry-pi/">May 20 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/">Continuous deployement with Github, Travis and Heroku for Node.js</a></h1>
+    <h1 class="title"><a href="/2013/05/20/plug-your-minitel-on-your-raspberry-pi/">Plug your Minitel on your Raspberry Pi</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>Cloud services helps the developer to focus on the code. In one or two commands you get a running server, a CI engine, <em>etc</em>.</p>
-<p>I wont present you Gihtub, Travis or Heroku, if you&#39;re not aware of them, just check their websites!</p>
-<h1>Prerequisites</h1>
-<p>You need the following to be installed on your machine:</p>
+        <p>Hi,</p>
+<p>So what is a Minitel? According to Wikipedia :</p>
+<blockquote>
+<p>The Minitel was a Videotex online service accessible through telephone lines, and is considered one of the world&#39;s most successful pre-World Wide Web online services.<a href="http://en.wikipedia.org/wiki/Minitel">¹</a> </p>
+</blockquote>
+<p>This service was accessible through particular devices. They had a screen, a keyboard and a modem.</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/minitel.jpg" alt=""></p>
+<p>A screen and a keyboard are just what we need for our Pi, so let&#39;s plug them together!</p>
+<h1>Minitel and serial communication</h1>
+<p>The Minitel have a serial port. It&#39;s goal is to communicate to peripherals such as a printer or whatever.</p>
+<p>The socket is a classic 180° DIN with 5 pins :</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/dinMinitel.JPG" alt=""></p>
+<p>Here is the description of the pins:</p>
 <ul>
-<li>the <a href="https://toolbelt.heroku.com/">Heroku toolbelt</a>.</li>
-<li>the <a href="https://rubygems.org/">RubyGem</a> tool.</li>
+<li>1: Rx: data reception </li>
+<li>2: Ground</li>
+<li>3: Tx: data transmission</li>
+<li>4: Ready to work signal</li>
+<li>5: 8.5v - 1A power supply</li>
 </ul>
-<h1>Setting all this up</h1>
-<p>First of all, you have to get your auth token from Heroku :</p>
-<pre><code>token=<span class="char">$(</span>heroku <span class="method">auth:</span>token)
-</code></pre>
-
-<p>This will store the token, and keep it for later.</p>
-<p>Then, install the Travis CLI tool:</p>
-<pre><code>su<span class="operator"><span class="keyword">do</span> gem install travis
-</code></pre>
-
-<p>You now have the Travis CLI tool installed. This will help you to encrypt your Heroku token.</p>
-<pre><code><span class="title">travis</span> encrypt HEROKU_API_KEY=<span class="variable">$token</span> --add
-</code></pre>
-
-<p>Running the above command will add your encrypted token to your <code>.travis.yml</code>.</p>
-<p>Open it and you should see something like this:</p>
-<pre><code><span class="method">env:</span> 
-  <span class="method">global:</span> 
-  - <span class="method">secure:</span> <span class="class">YOUR_ENCRYPTED_TOKEN</span>
-</code></pre>
-
-<p>Travis will decrypt it during the build, and be able to authenticate itself with Heroku.</p>
-<h1>Plug the pipe between Travis and Heroku</h1>
-<p>Now you need to tell Travis to deploy your app to Heroku after a succesful build.</p>
-<p>Luckily, Travis can handle it through its <a href="http://about.travis-ci.org/docs/user/build-configuration/#Build-Lifecycle">build lifecycle</a>.</p>
-<p>Just add the following to your <code>.travis.yml</code> (don&#39;t forget to <strong>replace</strong> HEROKU_APP_NAME!):</p>
-<pre><code><span class="label">after_success:</span>
-  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
-  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
-  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - yes | heroku keys:<span class="keyword">add</span>
-  - yes | git <span class="keyword">push</span> heroku master
-</code></pre>
-<p>This will install the Heroku toolbelt, and then configure your Travis worker to communicate with Heroku and finally push your code to it!</p>
-<p>And you&#39;re done! Now everytime you push your code to Github, Travis will build/test it and deploy it to Heroku!</p>
-<p>Here is the whole <code>.travis.yml</code>:</p>
-<pre><code>--- 
-<span class="label">language:</span> node_js
-<span class="label">env:</span> 
-  global: 
-  - secure: YOUR_ENCRYPTED_TOKEN
-<span class="label">after_success:</span>
-  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
-  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
-  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - yes | heroku keys:<span class="keyword">add</span>
-  - yes | git <span class="keyword">push</span> heroku master
-<span class="label">node_js:</span> 
-- <span class="number">0.8</span>
-</code></pre>
+<p>So pins 1,2 and 3 are what we need to communicate through serial with the Pi.</p>
+<p>Please note that not all Minitels have this kind of sockets. To find a compatible one, the Minitel must have this socket AND two special keys on the keyboard <code>Fnct</code> and <code>Ctrl</code>. They are usualy called <em>Minitel 1B</em>.</p>
+<h1>TTL levels and the Pi</h1>
+<p>The UART on the Pi works with 0v and 3.3v. But a lot of old stuff use 0v and 5v. This is the case of the Minitel, so we need to adapt the voltage levels :</p>
+<ul>
+<li>Lower the Tx level of the Minitel from 5v to 3.3v</li>
+<li>Raise the Tx level of the Pi from 3.3v to 5v</li>
+</ul>
+<p>To achieve that, I used the following schema based on the recommendation of <a href="https://twitter.com/lhuet35">@lhuet35</a> (thanks!). You can check its Devoxx presentation (in french) here : <a href="http://parleys.com/play/51599a1ee4b0ffdd7e058b6b/chapter0/about">3615 Cloud</a></p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/minitel.png" alt=""></p>
+<p>Be careful, the unused pin between the 5v and the GND of the Pi is not depicted on this schema!!</p>
+<p>Here is the stuff mounted on a breadboard :</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/minitelProto.JPG" alt=""></p>
+<h1>Configure a tty on the UART</h1>
+<p>You then need to configure a tty that will communicate through the UART.</p>
+<p>The following configuration is based on a Raspbian, but it should be the same on other distros.</p>
+<ul>
+<li>You may need to install <code>getty</code> :<ul>
+<li><code>sudo apt-get install getty</code></li>
+</ul>
+</li>
+<li>Backup the <code>/boot/cmdline.txt</code> file just in case :)<ul>
+<li><code>sudo cp /boot/cmdline.txt /boot/cmdline.bak.txt</code></li>
+</ul>
+</li>
+<li>Edit the file: <ul>
+<li><code>sudo vim /boot/cmdline.txt</code> </li>
+<li>and remove everything related to the serial port <code>ttyAMA0</code>, i.e. : <code>console=ttyAMA0,115200 kgdboc=ttyAMA0,115200</code></li>
+</ul>
+</li>
+<li>Add a <code>getty</code> conf on <code>/etc/inittab</code> :<ul>
+<li><code>7:2345:respawn:/sbin/getty ttyAMA0 4800v23</code></li>
+<li>also check there is no other <code>getty</code> conf for this tty on the file</li>
+</ul>
+</li>
+<li>Then you need to create a <code>gettydefs</code> file (or edit it)<ul>
+<li><code>sudo vim /etc/gettydefs</code></li>
+<li>and add the following <code>4800v23# B4800 CS7 PARENB -PARODD GLOBAL # B4800 ISTRIP CS7 PARENB -PARODD GLOBAL BRKINT IGNPAR ICRNL IXON IXANY OPOST ONLCR CREAD HUPCLISIG ICANON ECHO ECHOE ECHOK #@S login: #4800v23</code> on one line!</li>
+<li>this will configure the tty on UART</li>
+</ul>
+</li>
+</ul>
+<p>You can now plug the Pi to the Minitel and reboot the Pi.</p>
+<h1>Configure the Minitel</h1>
+<p>You need to switch the Minitel mode to be able to communicate through the serial port.</p>
+<ul>
+<li>Power on the Minitel</li>
+<li>Press <code>Fnct+T</code> then <code>A</code> : the Minitel will switch to the serial mode</li>
+<li>Press <code>Fnct+P</code> then <code>4</code> : the Minitel now communicate through serial at 4800bps (the max speed)</li>
+<li>Press <code>Fnct+T</code> then <code>E</code> : to deactivate the local echo</li>
+<li>Press <code>↵</code> and you should now see the login prompt (maybe with some white squares), put your login and you&#39;re done!</li>
+</ul>
+<p>Be aware that you&#39;ll need to do this Minitel configuration everytime you power it up.</p>
+<p>Here is a pic of my Minitel :</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/piMinitel.JPG" alt=""></p>
+<p>Happy coding!</p>
 
       
     </div>
@@ -221,7 +233,7 @@
       
         
           <div class="alignleft">
-            <a href="/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/#more" class="more-link">Read More</a>
+            <a href="/2013/05/20/plug-your-minitel-on-your-raspberry-pi/#more" class="more-link">Read More</a>
           </div>
         
         
