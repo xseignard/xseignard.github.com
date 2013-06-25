@@ -338,7 +338,7 @@ mv src src-orig && mv src-cov src
 	mv src-orig src
 </code></pre>
 
-<p>Even simpler! You can just do the following, and forget all that coverage stuff above!:</p>
+<p><strong>Even simpler! You can just do the following, and forget all that coverage stuff above!</strong></p>
 <pre><code><span class="comment">_MOCHA="node_modules/</span>.<span class="comment">bin/_mocha"</span>
 <span class="comment">coverage:</span>
 <span class="comment">	@#</span> <span class="comment">check</span> <span class="comment">if</span> <span class="comment">reports</span> <span class="comment">folder</span> <span class="comment">exists</span>, <span class="comment">if</span> <span class="comment">not</span> <span class="comment">create</span> <span class="comment">it</span>
@@ -346,7 +346,7 @@ mv src src-orig && mv src-cov src
 <span class="comment">	$(ISTANBUL)</span> <span class="comment">cover</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">report</span> <span class="comment">lcovonly</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">dir</span> <span class="string">.</span><span class="comment">/reports</span> <span class="comment">$(_MOCHA)</span> <span class="literal">-</span><span class="literal">-</span> <span class="literal">-</span><span class="comment">R</span> <span class="comment">spec</span> <span class="comment">$(TESTS)
 </code></pre>
 
-<p>Just note the double dash to distinguish <code>istanbul<code> args from the <code>mocha<code> ones and the use of <code>_mocha<code> internal executable (see <a href="https://github.com/gotwarlost/istanbul/issues/44">istanbul/issues/44</a>).</p>
+<p>Just note the double dash to distinguish <code>istanbul</code> args from the <code>mocha</code> ones and the use of <code>_mocha</code> internal executable (see <a href="https://github.com/gotwarlost/istanbul/issues/44">istanbul/issues/44</a>).</p>
 <h1>Sonar</h1>
 <p>Sonar analysis can be performed in various ways (ant, maven, sonar-runner). Even if i do like maven (yes I do!), there&#39;s no way I&#39;ll put a <code>pom.xml</code> in a node.js project.</p>
 <p>We&#39;ll use the <a href="http://docs.codehaus.org/display/SONAR/Analyzing+with+Sonar+Runner">sonar-runner</a>. </p>
