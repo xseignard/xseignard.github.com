@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Continuous deployement with Github, Travis and Heroku for Node.js | /dev/xavier</title>
+  <title>Interfacing Leap Motion with Arduino thanks to Node.js | /dev/xavier</title>
   <meta name="author" content="@xavier_seignard">
   
   <meta name="description" content="show me some code!">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Continuous deployement with Github, Travis and Heroku for Node.js"/>
+  <meta property="og:title" content="Interfacing Leap Motion with Arduino thanks to Node.js"/>
   <meta property="og:site_name" content="/dev/xavier"/>
 
   <!-- TWITTER CARD -->
@@ -25,73 +25,16 @@
   <meta property="twitter:creator" content="@xavier_seignard"/>
   <!-- title -->
   
-  <meta property="twitter:title" content="Continuous deployement with Github, Travis and Heroku for Node.js"/>
+  <meta property="twitter:title" content="Interfacing Leap Motion with Arduino thanks to Node.js"/>
   
   <!-- description -->
   
-  <meta name="twitter:description" content="Cloud services helps the developer to focus on the code. In one or two commands you get a running server, a CI engine, etc.
-I wont present you Gihtub, Travis or Heroku, if you&amp;#39;re not aware of them, just check their websites!
-Prerequisites
-You need the following to be installed on your machine:
-
-the Heroku toolbelt.
-the RubyGem tool.
-
-Setting all this up
-First of all, you have to get your auth token from Heroku :
-token=$(heroku auth:token)
-
-
-This will store the token, and keep it for later.
-Then, install the Travis CLI tool:
-sudo gem install travis
-
-
-You now have the Travis CLI tool installed. This will help you to encrypt your Heroku token.
-travis encrypt HEROKU_API_KEY=$token --add
-
-
-Running the above command will add your encrypted token to your .travis.yml.
-Open it and you should see something like this:
-env: 
-  global: 
-  - secure: YOUR_ENCRYPTED_TOKEN
-
-
-Travis will decrypt it during the build, and be able to authenticate itself with Heroku.
-Plug the pipe between Travis and Heroku
-Now you need to tell Travis to deploy your app to Heroku after a succesful build.
-Luckily, Travis can handle it through its build lifecycle.
-Just add the following to your .travis.yml (don&amp;#39;t forget to replace HEROKU_APP_NAME!):
-after_success:
-  - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-  - git remote add heroku git@heroku.com:HEROKU_APP_NAME.git
-  - echo &quot;Host heroku.com&quot; &gt;&gt; ~/.ssh/config
-  - echo &quot;   StrictHostKeyChecking no&quot; &gt;&gt; ~/.ssh/config
-  - echo &quot;   CheckHostIP no&quot; &gt;&gt; ~/.ssh/config
-  - echo &quot;   UserKnownHostsFile=/dev/null&quot; &gt;&gt; ~/.ssh/config
-  - yes | heroku keys:add
-  - yes | git push heroku master
-
-This will install the Heroku toolbelt, and then configure your Travis worker to communicate with Heroku and finally push your code to it!
-And you&amp;#39;re done! Now everytime you push your code to Github, Travis will build/test it and deploy it to Heroku!
-Here is the whole .travis.yml:
---- 
-language: node_js
-env: 
-  global: 
-  - secure: YOUR_ENCRYPTED_TOKEN
-after_success:
-  - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-  - git remote add heroku git@heroku.com:HEROKU_APP_NAME.git
-  - echo &quot;Host heroku.com&quot; &gt;&gt; ~/.ssh/config
-  - echo &quot;   StrictHostKeyChecking no&quot; &gt;&gt; ~/.ssh/config
-  - echo &quot;   CheckHostIP no&quot; &gt;&gt; ~/.ssh/config
-  - echo &quot;   UserKnownHostsFile=/dev/null&quot; &gt;&gt; ~/.ssh/config
-  - yes | heroku keys:add
-  - yes | git push heroku master
-node_js: 
-- 0.8">
+  <meta name="twitter:description" content="Hi,
+What about controlling physical thing while just waving your hands?
+Thanks to the Leap Motion, Arduino and a bit of Node.js magic it&amp;#39;s pretty simple!
+Let&amp;#39;s check that!
+Leap Motion
+There is">
   
   <!-- image -->
   
@@ -197,80 +140,26 @@ node_js:
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-02-18T19:01:23.000Z"><a href="/2013/02/18/continuous-deployement-with-github-travis-and-heroku-for-node.js/">Feb 18 2013</a></time>
+        <time datetime="2013-06-25T13:49:38.000Z"><a href="/2013/06/25/interfacing-leap-motion-with-arduino-thanks-to-nodejs/">Jun 25 2013</a></time>
       
       
   
-    <h1 class="title">Continuous deployement with Github, Travis and Heroku for Node.js</h1>
+    <h1 class="title">Interfacing Leap Motion with Arduino thanks to Node.js</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>Cloud services helps the developer to focus on the code. In one or two commands you get a running server, a CI engine, <em>etc</em>.</p>
-<p>I wont present you Gihtub, Travis or Heroku, if you&#39;re not aware of them, just check their websites!</p>
-<h1>Prerequisites</h1>
-<p>You need the following to be installed on your machine:</p>
-<ul>
-<li>the <a href="https://toolbelt.heroku.com/">Heroku toolbelt</a>.</li>
-<li>the <a href="https://rubygems.org/">RubyGem</a> tool.</li>
-</ul>
-<h1>Setting all this up</h1>
-<p>First of all, you have to get your auth token from Heroku :</p>
-<pre><code>token=<span class="char">$(</span>heroku <span class="method">auth:</span>token)
-</code></pre>
-
-<p>This will store the token, and keep it for later.</p>
-<p>Then, install the Travis CLI tool:</p>
-<pre><code>su<span class="operator"><span class="keyword">do</span> gem install travis
-</code></pre>
-
-<p>You now have the Travis CLI tool installed. This will help you to encrypt your Heroku token.</p>
-<pre><code><span class="title">travis</span> encrypt HEROKU_API_KEY=<span class="variable">$token</span> --add
-</code></pre>
-
-<p>Running the above command will add your encrypted token to your <code>.travis.yml</code>.</p>
-<p>Open it and you should see something like this:</p>
-<pre><code><span class="method">env:</span> 
-  <span class="method">global:</span> 
-  - <span class="method">secure:</span> <span class="class">YOUR_ENCRYPTED_TOKEN</span>
-</code></pre>
-
-<p>Travis will decrypt it during the build, and be able to authenticate itself with Heroku.</p>
-<h1>Plug the pipe between Travis and Heroku</h1>
-<p>Now you need to tell Travis to deploy your app to Heroku after a succesful build.</p>
-<p>Luckily, Travis can handle it through its <a href="http://about.travis-ci.org/docs/user/build-configuration/#Build-Lifecycle">build lifecycle</a>.</p>
-<p>Just add the following to your <code>.travis.yml</code> (don&#39;t forget to <strong>replace</strong> HEROKU_APP_NAME!):</p>
-<pre><code><span class="label">after_success:</span>
-  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
-  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
-  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - yes | heroku keys:<span class="keyword">add</span>
-  - yes | git <span class="keyword">push</span> heroku master
-</code></pre>
-<p>This will install the Heroku toolbelt, and then configure your Travis worker to communicate with Heroku and finally push your code to it!</p>
-<p>And you&#39;re done! Now everytime you push your code to Github, Travis will build/test it and deploy it to Heroku!</p>
-<p>Here is the whole <code>.travis.yml</code>:</p>
-<pre><code>--- 
-<span class="label">language:</span> node_js
-<span class="label">env:</span> 
-  global: 
-  - secure: YOUR_ENCRYPTED_TOKEN
-<span class="label">after_success:</span>
-  - wget -qO- https://toolbelt<span class="preprocessor">.heroku</span><span class="preprocessor">.com</span>/install-ubuntu<span class="preprocessor">.sh</span> | sh
-  - git remote <span class="keyword">add</span> heroku git@heroku<span class="preprocessor">.com</span>:HEROKU_APP_NAME<span class="preprocessor">.git</span>
-  - echo <span class="string">"Host heroku.com"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   StrictHostKeyChecking no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   CheckHostIP no"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - echo <span class="string">"   UserKnownHostsFile=/dev/null"</span> &gt;&gt; ~/<span class="preprocessor">.ssh</span>/config
-  - yes | heroku keys:<span class="keyword">add</span>
-  - yes | git <span class="keyword">push</span> heroku master
-<span class="label">node_js:</span> 
-- <span class="number">0.8</span>
-</code></pre>
+        <p>Hi,</p>
+<p>What about controlling physical thing while just waving your hands?</p>
+<p>Thanks to the Leap Motion, Arduino and a bit of Node.js magic it&#39;s pretty simple!</p>
+<p>Let&#39;s check that!</p>
+<h1>Leap Motion</h1>
+<p>There is a nice feature in the SDK of the Leap Motion : the websocket server.</p>
+<p>When activated, the Leap Motion software streams the tracking data over it.</p>
+<p>You then just need to connect your software to it and you&#39;re ready to analyse these data.</p>
+<p>Go to the Leap Motion controller settings, and then in the WebSocket tab and activate it.</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/leapWebSocket.png" alt=""></p>
 
       
     </div>
@@ -285,7 +174,7 @@ node_js:
         
   
   <div class="tags">
-    <a href="/tags/github/">github</a>, <a href="/tags/node/">node</a>, <a href="/tags/travis/">travis</a>, <a href="/tags/heroku/">heroku</a>
+    <a href="/tags/node/">node</a>, <a href="/tags/leapmotion/">leapmotion</a>, <a href="/tags/diy/">diy</a>
   </div>
 
         

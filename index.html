@@ -136,6 +136,47 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2013-06-25T13:49:38.000Z"><a href="/2013/06/25/interfacing-leap-motion-with-arduino-thanks-to-nodejs/">Jun 25 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/06/25/interfacing-leap-motion-with-arduino-thanks-to-nodejs/">Interfacing Leap Motion with Arduino thanks to Node.js</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Hi,</p>
+<p>What about controlling physical thing while just waving your hands?</p>
+<p>Thanks to the Leap Motion, Arduino and a bit of Node.js magic it&#39;s pretty simple!</p>
+<p>Let&#39;s check that!</p>
+<h1>Leap Motion</h1>
+<p>There is a nice feature in the SDK of the Leap Motion : the websocket server.</p>
+<p>When activated, the Leap Motion software streams the tracking data over it.</p>
+<p>You then just need to connect your software to it and you&#39;re ready to analyse these data.</p>
+<p>Go to the Leap Motion controller settings, and then in the WebSocket tab and activate it.</p>
+<p><img src="https://dl.dropboxusercontent.com/u/17657227/Info/blog/leapWebSocket.png" alt=""></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2013-05-20T11:07:21.000Z"><a href="/2013/05/20/plug-your-minitel-on-your-raspberry-pi/">May 20 2013</a></time>
       
       
@@ -292,54 +333,10 @@
 <p>You now have a test report ready to be consumed by Sonar (and Jenkins too if you want!).</p>
 <h1>Code coverage with Istanbul</h1>
 <p>Istanbul is the new cool kid when it comes to code coverage. And it is pretty simple to use! </p>
-<ul>
-<li>Instrument your code</li>
-<li>Run your mocha tests against this instrumented code with the right reporter</li>
-<li>That&#39;s it</li>
-</ul>
-<p>Instrumenting your code is just a single Istanbul command:</p>
-<pre><code><span class="comment">$(ISTANBUL)</span> <span class="comment">instrument</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">output</span> <span class="comment">src</span>-<span class="comment">cov</span> <span class="comment">src
-</code></pre>
-
-<p>This will create a <code>src-cov</code> folder with the instrumented version of your code (provided your code is in the src folder).</p>
-<p>You then have to run your tests against the instrumented code, so your tests need to depend on this new code. To achieve that, I move my original sources in another folder and replace them with the instrumented ones. Just a matter of 2 shell commands.</p>
-<pre><code>@# move original src code and <span class="operator"><span class="keyword">replace</span> it <span class="keyword">by</span> the instrumented one
-mv src src-orig && mv src-cov src
-</code></pre>
-
-<p>Now you can run your tests, with the right reporter and tell Istanbul to only produce lcov file since it&#39;s the only one we need for Sonar.</p>
-<p>I use the nice <a href="https://github.com/arikon/mocha-istanbul">mocha-istanbul</a> reporter, that leverage the use of both tools, clean and easy. Install it.</p>
-<pre><code><span class="comment">npm</span> <span class="comment">install</span> <span class="comment">mocha</span>-<span class="comment">istanbul</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">save</span>-<span class="comment">dev
-</code></pre>
-
-<p>You can now run the code coverage info generation.</p>
-<pre><code><span class="constant">ISTANBUL_REPORTERS</span>=lcovonly <span class="variable">$(</span><span class="constant">MOCHA</span>) -<span class="constant">R</span> mocha-istanbul <span class="variable">$(</span><span class="constant">TESTS</span>)
-</code></pre>
-
-<p>You now have a <code>lcov.info</code> file ready to be eaten by Sonar. (I move it to <code>reports/coverage.lcov</code> for personal convenience, but there&#39;s no need.)</p>
-<p>Don&#39;t forget to put back your original sources in place!</p>
-<pre><code><span class="title">rm</span> -rf src
-<span class="title">mv</span> src-orig src
-</code></pre>
-
-<p>Here is the full <code>Makefile</code> task:</p>
-<pre><code>coverage:
-	<span class="variable">@#</span> check <span class="keyword">if</span> reports folder <span class="keyword">exists</span>, <span class="keyword">if</span> <span class="keyword">not</span> create it
-	<span class="variable">@test</span> -d reports || <span class="keyword">mkdir</span> reports
-	<span class="variable">$(</span>ISTANBUL) instrument --output src-cov src
-	<span class="variable">@#</span> move original src code <span class="keyword">and</span> replace it by the instrumented one
-	mv src src-orig && mv src-cov src
-	<span class="variable">@#</span> <span class="keyword">tell</span> istanbul to only generate the lcov file
-	ISTANBUL_REPORTERS=lcovonly <span class="variable">$(</span>MOCHA) -R mocha-istanbul <span class="variable">$(</span>TESTS)
-	<span class="variable">@#</span> place the lcov report in the report folder, remove instrumented code
-	<span class="variable">@#</span> <span class="keyword">and</span> reput src at its place
-	mv lcov.info reports/coverage.lcov
-	rm -rf src
-	mv src-orig src
-</code></pre>
-
-<p><strong>Even simpler! You can just do the following, and forget all that coverage stuff above!</strong></p>
-<pre><code><span class="comment">_MOCHA="node_modules/</span>.<span class="comment">bin/_mocha"</span>
+<p><code>instabul cover myNodeCommand</code> will transparently add coverage info to the executed node command!</p>
+<p>Since <code>mocha</code> is a node command, everything is ok!</p>
+<p>You can just do the following</p>
+<pre><code><span class="comment">_MOCHA=node_modules/</span>.<span class="comment">bin/_mocha</span>
 <span class="comment">coverage:</span>
 <span class="comment">	@#</span> <span class="comment">check</span> <span class="comment">if</span> <span class="comment">reports</span> <span class="comment">folder</span> <span class="comment">exists</span>, <span class="comment">if</span> <span class="comment">not</span> <span class="comment">create</span> <span class="comment">it</span>
 <span class="comment">	@test</span> <span class="literal">-</span><span class="comment">d</span> <span class="comment">reports</span> <span class="comment">||</span> <span class="comment">mkdir</span> <span class="comment">reports</span>
@@ -347,6 +344,7 @@ mv src src-orig && mv src-cov src
 </code></pre>
 
 <p>Just note the double dash to distinguish <code>istanbul</code> args from the <code>mocha</code> ones and the use of <code>_mocha</code> internal executable (see <a href="https://github.com/gotwarlost/istanbul/issues/44">istanbul/issues/44</a>).</p>
+<p>If you need to produce some other report formats (html, cobertura, etc.), you can check the <a href="https://github.com/gotwarlost/istanbul#the-report-command">report options</a>.</p>
 <h1>Sonar</h1>
 <p>Sonar analysis can be performed in various ways (ant, maven, sonar-runner). Even if i do like maven (yes I do!), there&#39;s no way I&#39;ll put a <code>pom.xml</code> in a node.js project.</p>
 <p>We&#39;ll use the <a href="http://docs.codehaus.org/display/SONAR/Analyzing+with+Sonar+Runner">sonar-runner</a>. </p>
@@ -752,7 +750,7 @@ GpioPinDigitalInput button;
   
     <li><a href="/tags/github/">github</a><small>1</small></li>
   
-    <li><a href="/tags/node/">node</a><small>3</small></li>
+    <li><a href="/tags/node/">node</a><small>4</small></li>
   
     <li><a href="/tags/travis/">travis</a><small>1</small></li>
   
@@ -775,6 +773,10 @@ GpioPinDigitalInput button;
     <li><a href="/tags/sonar/">sonar</a><small>1</small></li>
   
     <li><a href="/tags/DIY/">DIY</a><small>1</small></li>
+  
+    <li><a href="/tags/leapmotion/">leapmotion</a><small>1</small></li>
+  
+    <li><a href="/tags/diy/">diy</a><small>1</small></li>
   
   </ul>
 </div>
