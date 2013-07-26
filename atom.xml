@@ -4,7 +4,7 @@
   <subtitle><![CDATA[show me some code]]></subtitle>
   <link href="http://xseignard.github.io/atom.xml" rel="self"/>
   <link href="http://xseignard.github.io"/>
-  <updated>2013-06-26T07:56:15.285Z</updated>
+  <updated>2013-07-26T11:09:52.260Z</updated>
   <id>http://xseignard.github.io/</id>
   <author>
     <name><![CDATA[@xavier_seignard]]></name>
@@ -453,7 +453,7 @@ sonar<span class="variable">.javascript</span><span class="variable">.lcov</span
     <link href="http://xseignard.github.io/2013/06/25/interfacing-leap-motion-with-arduino-thanks-to-nodejs/"/>
     <id>http://xseignard.github.io/2013/06/25/interfacing-leap-motion-with-arduino-thanks-to-nodejs/</id>
     <published>2013-06-25T13:49:38.000Z</published>
-    <updated>2013-06-26T07:55:43.000Z</updated>
+    <updated>2013-07-26T11:03:56.000Z</updated>
     <content type="html"><![CDATA[<p>What about controlling physical things by waving your hands?</p>
 <p>Thanks to the Leap Motion, Arduino and a bit of Node.js magic it&#39;s pretty simple!</p>
 <p>Let&#39;s check that!</p>
@@ -525,8 +525,8 @@ board.<span class="literal">on</span>(<span class="string">'ready'</span>, <span
 <p>You can find the code on github: <a href="https://github.com/xseignard/leapLamp">leapLamp</a>, feel free to use it and/or ask for some help.</p>
 <p>Happy coding.</p>
 ]]></content>
+    <category scheme="http://xseignard.github.io/tags/DIY/" term="DIY"/>
     <category scheme="http://xseignard.github.io/tags/node/" term="node"/>
     <category scheme="http://xseignard.github.io/tags/leapmotion/" term="leapmotion"/>
-    <category scheme="http://xseignard.github.io/tags/DIY/" term="DIY"/>
   </entry>
 </feed>
