@@ -1,25 +1,8 @@
 (function($){
-  $.getScript(moment_js_path, function(){
-    var url = 'https://api.twitter.com/1/statuses/user_timeline/' + twitter_stream[0] + '.json?count=' + twitter_stream[1] + '&exclude_replies=' + (twitter_stream[2] ? 0 : 1) + '&trim_user=true&callback=?';
-
-    var linkify = function(text){
-      text = text
-        .replace(/(https?:\/\/)([\w\-:;?&=+.%#\/]+)/gi, '<a href="$1$2">$2</a>')
-        .replace(/(^|\W)@(\w+)/g, '$1<a href="http://twitter.com/$2">@$2</a>')
-        .replace(/(^|\W)#(\w+)/g, '$1<a href="http://search.twitter.com/search?q=%23$2">#$2</a>');
-
-      return text;
-    };
-
-    $.getJSON(url, function(json){
-      var result = '';
-
-      for (var i=0, len=json.length; i<len; i++){
-        var item = json[i];
-        result += '<li>' + linkify(item.text) + '<small>' + moment(item.created_at).fromNow() + '</small></li>';
-      }
-
-      $('#tweets').html(result);
-    });
-  });
+  var script = '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+  var html = ['<a class="twitter-timeline" href="https://twitter.com/xavier_seignard" ',
+              'data-chrome="noheader transparent" ',
+              'data-widget-id="364346162255368193">Tweets by @xavier_seignard</a>'].join('');
+  var result = html + script;
+  $('#tweets').html(result);
 })(jQuery);
